@@ -29,9 +29,6 @@ $ forge test
 
 ### Format
 
-```shell
-$ forge fmt
-```
 
 ### Gas Snapshots
 

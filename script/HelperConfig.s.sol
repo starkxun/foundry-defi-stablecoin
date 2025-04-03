@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: MIT
 
-import { Script } from "forge-std/Script.sol";
-import {MockV3Aggregator} from '../test/mooks/MockV3Aggregator.sol';
-import { ERC20Mock } from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
+import {Script} from "forge-std/Script.sol";
+import {MockV3Aggregator} from "../test/mooks/MockV3Aggregator.sol";
+import {ERC20Mock} from "@openzeppelin/contracts/mocks/token/ERC20Mock.sol";
 
 pragma solidity ^0.8.18;
 
 contract HelperConfig is Script {
-    
-    struct NetworkConfig{
+    struct NetworkConfig {
         address wethUsdPriceFeed;
         address wbtcUsdPriceFeed;
         address weth;
@@ -24,7 +23,7 @@ contract HelperConfig is Script {
     NetworkConfig public activeNetworkConfig;
 
     constructor() {
-        if(block.chainid == 11155111){
+        if (block.chainid == 11155111) {
             activeNetworkConfig = getSepoliaEthConfig();
         } else {
             activeNetworkConfig = getOrCreateAnvilEthConfig();
@@ -50,15 +49,15 @@ contract HelperConfig is Script {
         vm.startBroadcast();
         MockV3Aggregator ethUsdPriceFeed = new MockV3Aggregator(DECIMALS, ETH_USD_PRICE);
         // ERC20Mock wethMock = new ERC20Mock("WETH", "WETH", msg.sender, 1000e8);
-        ERC20Mock wethMock = new ERC20Mock();  // 无参数
-        wethMock.mint(msg.sender, 1000e8);     // 手动铸造代币
+        ERC20Mock wethMock = new ERC20Mock(); // 无参数
+        wethMock.mint(msg.sender, 1000e8); // 手动铸造代币
 
         MockV3Aggregator btcUsdPriceFeed = new MockV3Aggregator(DECIMALS, BTC_USD_PRICE);
         // ERC20Mock wbtcMock = new ERC20Mock("WBTC", "WBTC", msg.sender, 1000e8);
         ERC20Mock wbtcMock = new ERC20Mock();
         wbtcMock.mint(msg.sender, 1000e8);
         vm.stopBroadcast();
-   
+
         return NetworkConfig({
             wethUsdPriceFeed: address(ethUsdPriceFeed),
             wbtcUsdPriceFeed: address(btcUsdPriceFeed),
@@ -66,7 +65,5 @@ contract HelperConfig is Script {
             wbtc: address(wbtcMock),
             deployerKey: DEFAULT_ANVIL_KEY
         });
-   
     }
-
 }
